@@ -63,12 +63,13 @@ def test_read_instructions_downloads_the_configured_object(
     assert instructions.read_instructions() == "Istruzioni dal bucket"
 
 
-def test_instructions_bucket_defaults_to_resource_prefix_or_project_id() -> None:
+def test_instructions_bucket_uses_the_configured_name() -> None:
     shared = AppConfig(project_id="shared-project", resource_prefix="student")
     dedicated = AppConfig(project_id="dedicated-project", resource_prefix="")
+    bucket_name = "its-ict-sage-andrea-sassi-instructions"
 
-    assert shared.instructions_bucket == "student-instructions"
-    assert dedicated.instructions_bucket == "dedicated-project-instructions"
+    assert shared.instructions_bucket == bucket_name
+    assert dedicated.instructions_bucket == bucket_name
 
 
 def test_ask_response_schema_is_unchanged(monkeypatch: pytest.MonkeyPatch) -> None:

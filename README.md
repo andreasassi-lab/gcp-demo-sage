@@ -27,7 +27,7 @@ Utente ──POST /api/ask──▶ API FastAPI su Cloud Run
 | Base di conoscenza | Firestore (Native mode) | Collection `chunks`: testo + embedding + metadati, interrogata con `find_nearest` |
 | LLM ed embedding | Vertex AI (Gemini) | Nessuna API key: autenticazione via ADC / service account |
 | Documenti sorgente | Cloud Storage | Bucket `<project_id>-sage-docs` |
-| Istruzioni del modello | Cloud Storage | Bucket `<prefisso>-instructions`, oggetto `istruzioni.md` |
+| Istruzioni del modello | Cloud Storage | Bucket `its-ict-sage-andrea-sassi-instructions`, oggetto `istruzioni.md` |
 | Analytics | BigQuery | Tabella `question_log`, scritta in modo sincrono nella richiesta |
 | Immagini container | Artifact Registry | Popolato dalla pipeline di deploy |
 

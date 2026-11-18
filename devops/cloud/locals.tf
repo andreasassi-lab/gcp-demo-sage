@@ -10,7 +10,5 @@ locals {
     : "${substr(local.app_name, 0, 17)}-${substr(md5(local.app_name), 0, 8)}-run"
   )
 
-  # In un progetto condiviso il bucket segue il prefisso personale; in un progetto
-  # dedicato usa il project id, come gli altri bucket con nome globale.
-  instructions_bucket_name = "${var.resource_prefix != "" ? var.resource_prefix : var.project_id}-instructions"
+  instructions_bucket_name = "its-ict-sage-andrea-sassi-instructions"
 }

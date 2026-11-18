@@ -9,7 +9,7 @@ separazione dev/test/prod. Ogni studente applica questo modulo sul proprio proge
 |---|---|---|
 | `services.tf` | `google_project_service` | Abilita le API GCP usate dal progetto |
 | `docs.tf` | `google_storage_bucket` | Bucket `<project_id>-sage-docs` per i documenti sorgente |
-| `instructions.tf` | `google_storage_bucket`, `google_storage_bucket_iam_member` | Bucket `<prefisso>-instructions` per `istruzioni.md`; Cloud Run può solo leggere gli oggetti |
+| `instructions.tf` | `google_storage_bucket`, `google_storage_bucket_iam_member` | Bucket `its-ict-sage-andrea-sassi-instructions` per `istruzioni.md`; Cloud Run può solo leggere gli oggetti |
 | `firestore.tf` | `google_firestore_database`, `google_firestore_index` | Firestore Native + indice vettoriale sul campo `embedding` della collection `chunks` |
 | `bigquery.tf` | `google_bigquery_dataset`, `google_bigquery_table` | Dataset `sage_analytics` e tabella `question_log` per l'analytics delle domande |
 | `artifact_registry.tf` | `google_artifact_registry_repository` | Repository Docker per le immagini dell'API |
@@ -28,7 +28,7 @@ valorizzato (es. `its-ict-sage-mario-rossi`) il progetto è condiviso e ogni nom
 prefisso, adattato alle regole di ogni servizio:
 
 - Cloud Run e Artifact Registry: `<prefisso>-sage`
-- Bucket: `<prefisso>-sage-docs`, `<prefisso>-instructions` (e `<prefisso>-tfstate` per lo state)
+- Bucket: `<prefisso>-sage-docs`, `its-ict-sage-andrea-sassi-instructions` per le istruzioni (e `<prefisso>-tfstate` per lo state)
 - Firestore: un database per persona, chiamato come il prefisso (in un progetto c'è un solo `(default)`)
 - BigQuery: dataset `<prefisso con _ al posto di ->_sage_analytics` (i dataset non ammettono trattini)
 - Service account: `<prefisso>-sage-run`, accorciato con un hash se supera i 30 caratteri
@@ -77,8 +77,8 @@ terraform plan -var-file=terraform.tfvars
 terraform apply -var-file=terraform.tfvars
 Set-Location ..\..
 
-$Prefix = "<resource_prefix>"
-gcloud storage cp .\sources\backend\istruzioni.md "gs://${Prefix}-instructions/istruzioni.md"
+$InstructionsBucket = "its-ict-sage-andrea-sassi-instructions"
+gcloud storage cp .\sources\backend\istruzioni.md "gs://${InstructionsBucket}/istruzioni.md"
 ```
 
 Il bucket ha accesso uniforme e pubblico disabilitato; il service account runtime di Cloud Run
