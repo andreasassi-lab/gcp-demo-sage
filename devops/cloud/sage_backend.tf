@@ -68,6 +68,10 @@ resource "google_cloud_run_v2_service" "sage_backend" {
         name  = "SAGE_RESOURCE_PREFIX"
         value = var.resource_prefix
       }
+      env {
+        name  = "SAGE_INSTRUCTIONS_BUCKET"
+        value = google_storage_bucket.sage_instructions.name
+      }
     }
   }
 
@@ -83,6 +87,7 @@ resource "google_cloud_run_v2_service" "sage_backend" {
   depends_on = [
     google_project_service.apis,
     google_project_iam_member.sage_run_vertex,
+    google_storage_bucket_iam_member.sage_run_instructions_reader,
   ]
 }
 

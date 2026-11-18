@@ -16,6 +16,7 @@ class AppConfig(BaseSettings):
     # Shared-project mode: when set, resource names derive from this prefix instead of the
     # dedicated-project defaults (same rules as devops/cloud/locals.tf). Empty = dedicated.
     resource_prefix: str = ""
+    instructions_bucket: str = ""
 
     # Firestore (the database name is derived from resource_prefix in shared-project mode)
     firestore_database: str = "(default)"
@@ -40,6 +41,9 @@ class AppConfig(BaseSettings):
 
         `bq_dataset` is the base name; after validation it is always the final dataset id.
         """
+        if not self.instructions_bucket:
+            bucket_prefix = self.resource_prefix or self.project_id
+            self.instructions_bucket = f"{bucket_prefix}-instructions"
         if not self.resource_prefix:
             return self
         self.firestore_database = self.resource_prefix

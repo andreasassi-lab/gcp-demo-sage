@@ -6,5 +6,8 @@ di origine di ogni informazione che usi.
 Estratti:
 {context}
 
+Istruzioni aggiuntive:
+{instructions}
+
 Domanda: {question}
 Risposta:

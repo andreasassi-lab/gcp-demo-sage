@@ -14,7 +14,7 @@ Utente ──POST /api/ask──▶ API FastAPI su Cloud Run
                                 │
                     1. calcola l'embedding della domanda (Vertex AI)
                     2. cerca i chunk più simili in Firestore (vector search, find_nearest)
-                    3. genera la risposta con Gemini a partire da quei chunk (Vertex AI)
+                    3. legge le istruzioni da Cloud Storage e genera la risposta con Gemini
                     4. logga la domanda su BigQuery (sincrono, dentro la richiesta)
                                 │
                                 ▼
@@ -27,12 +27,17 @@ Utente ──POST /api/ask──▶ API FastAPI su Cloud Run
 | Base di conoscenza | Firestore (Native mode) | Collection `chunks`: testo + embedding + metadati, interrogata con `find_nearest` |
 | LLM ed embedding | Vertex AI (Gemini) | Nessuna API key: autenticazione via ADC / service account |
 | Documenti sorgente | Cloud Storage | Bucket `<project_id>-sage-docs` |
+| Istruzioni del modello | Cloud Storage | Bucket `<prefisso>-instructions`, oggetto `istruzioni.md` |
 | Analytics | BigQuery | Tabella `question_log`, scritta in modo sincrono nella richiesta |
 | Immagini container | Artifact Registry | Popolato dalla pipeline di deploy |
 
 La pipeline di chunking/embedding **non gira dentro l'API**: è lo script
 `sources/backend/utils/ingest_documents.py`, eseguito manualmente per popolare Firestore a
 partire dai file Markdown in `sources/backend/data/`.
+
+Le istruzioni aggiuntive del modello si trovano in `sources/backend/istruzioni.md`: ogni
+richiesta le legge dal bucket dedicato e le aggiunge al prompt, senza inserirle nella
+collection RAG. In `/docs`, il `POST /api/ask` mantiene la risposta JSON `{ answer, sources }`.
 
 ### Firestore e BigQuery sono opzionali
 
